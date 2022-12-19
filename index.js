@@ -20,6 +20,7 @@ app.use(express.json());
 
 //importing the /videos route data
 const videosRoute = require('./routes/videos')
+
 //when accessing /videos, goto videosRoute
 app.use('/videos', videosRoute)
 

@@ -65,11 +65,8 @@ router.get('/:id', (req, res) => {
     res.send(filteredVideo)
 })
 
-
 router.get('/', (_req, res) => {
     res.status(200).send('Accessed /videos')
 })
-
-
 
 module.exports = router; // exporting videos
