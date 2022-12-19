@@ -29,9 +29,6 @@ app.get('/', (_req, res) => {
     res.status(200).send('Accessed root')
 })
 
-
-
-
 //Listening for access on PORT
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
