@@ -18,9 +18,20 @@ app.use(express.json());
 //***** START HERE *****//
 //**********************//
 
+//importing the /videos route data
+const videosRoute = require('./routes/videos')
+//when accessing /videos, goto videosRoute
+app.use('/videos', videosRoute)
 
+//root access
+app.get('/', (_req, res) => {
+    res.status(200).send('Accessed root')
+})
+
+
+
+
+//Listening for access on PORT
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
-
-app.get('/', (_req, _res) => console.log())
