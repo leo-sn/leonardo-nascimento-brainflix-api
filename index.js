@@ -13,6 +13,7 @@ require('dotenv').config();
 const PORT = process.env.PORT || 3030;
 //Middleware:
 app.use(express.json());
+app.use('/images', express.static("public/images"))
 
 //**********************//
 //***** START HERE *****//

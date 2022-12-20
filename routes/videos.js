@@ -4,8 +4,9 @@ const router = express.Router(); // using routing to the server.js
 const fs = require('fs');
 const path = require('path');
 const database = './data/videos.json'
-
+const bodyParser = require('body-parser');
 const url  = require('url');
+const uniqid = require('uniqid');
 
 //Reading videos database
 function readVideos() {
@@ -16,8 +17,11 @@ function readVideos() {
 
 //Writing new videos on database
 function writeVideos(data){
-    const videosInfo = JSON.stringify(data);
-    fs.writeFileSync('./data/videos.json', videosInfo)
+    const newVideoInfo = (data);
+    const oldVideoData = readVideos()
+
+    const toWrite = [...oldVideoData, newVideoInfo]
+    fs.writeFileSync('./data/videos.json', JSON.stringify(toWrite))
 }
 
 //get the video ID from URL
@@ -37,6 +41,9 @@ function findVideoById (videoRequestedId) {
 //********************//
 //** ROUTER ACTIONS **//
 //********************//
+
+app.use(express.json());
+app.use('/images', express.static("public/images"))
 
 
 router.get('/', (_req, res) => {
@@ -65,24 +72,36 @@ router.get('/:id', (req, res) => {
     res.send(filteredVideo)
 })
 
-// router.post('/upload', (req, res) => {
 
+router.post('/upload', (req, res) => {
 
-//     const newVideo = new Object;
-//     newVideo = {
-//         id: "84e96018-4022-434e-80bf-000ce4cd12b8",
-//         title: "BMX Rampage: 2021 Highlights",
-//         channel: "Red Cow",
-//         image: "https://i.imgur.com/l2Xfgpl.jpg",
-//         description: "On a gusty day in Southern Utah, a group of 25 daring mountain bikers blew the doors off what is possible on two wheels, unleashing some of the biggest moments the sport has ever seen. While mother nature only allowed for one full run before the conditions made it impossible to ride, that was all that was needed for event veteran Kyle Strait, who won the event for the second time -- eight years after his first Red Cow Rampage title",
-//         views: "1,001,023",
-//         likes: "110,985",
-//         duration: "4:01",
-//         video: "",
-//         timestamp: new Date().getTime(),
-//         comments: []
-//     }
-// })
+    const { link, title, description, image} = req.body
+
+    const dataStripped = {
+        link: link,
+        title: title,
+        description: description,
+        image: image,
+    }
+    
+    const newVideo = {
+        id: uniqid(),
+        title: dataStripped.title,
+        channel: "My Channel",
+        image: dataStripped.image,
+        description: dataStripped.description,
+        views: "666,666",
+        likes: "666,666",
+        duration: "6:66",
+        video: "",
+        timestamp: new Date().getTime(),
+        comments: [],
+    }
+
+    writeVideos(newVideo)
+
+    res.status(201).send('Video added successfully.')
+})
 
 router.get('/', (_req, res) => {
     res.status(200).send('Accessed /videos')
